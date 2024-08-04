@@ -1,7 +1,7 @@
 'use client';
 
-import { getAuthUserId, logOut } from '@/actions/auth-actions';
-import { getMemberByUserId } from '@/actions/memberActions';
+import { logOut } from '@/actions/auth-actions';
+
 import { transformImageUrl } from '@/lib/utils';
 import {
   Dropdown,
@@ -47,15 +47,6 @@ const UserMenu = ({ user }: UserMenuProps) => {
         <DropdownItem as={Link} href='/members/edit' className='text-gray-600 '>
           Edit Profile
         </DropdownItem>
-
-        <DropdownItem
-          as={Link}
-          href='/admin/moderation'
-          className='text-gray-600 '
-        >
-          photo moderation
-        </DropdownItem>
-
         <DropdownItem
           color='danger'
           onClick={async () => logOut()}
