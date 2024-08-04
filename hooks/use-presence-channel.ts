@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useRef } from 'react';
 import usePresenceStore from './use-presence-store';
 import { Channel, Members } from 'pusher-js';
