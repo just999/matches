@@ -8,6 +8,8 @@ import { Card, CardFooter, Image } from '@/lib/next-ui';
 import { Member } from '@prisma/client';
 
 import Link from 'next/link';
+import { toggleLikeMember } from '@/actions/like-actions';
+import { useState } from 'react';
 
 type MemberCardProps = {
   member: Member;
@@ -15,7 +17,20 @@ type MemberCardProps = {
 };
 
 const MemberCard = ({ member, likeIds }: MemberCardProps) => {
-  const hasLiked = likeIds.includes(member.userId);
+  const [hasLiked, setHasLiked] = useState(likeIds.includes(member.userId));
+  const [loading, setLoading] = useState(false);
+
+  const toggleLike = async () => {
+    setLoading(true);
+    try {
+      await toggleLikeMember(member.userId, hasLiked);
+      setHasLiked(!hasLiked);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const preventLinkAction = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,7 +47,11 @@ const MemberCard = ({ member, likeIds }: MemberCardProps) => {
       />
       <div onClick={preventLinkAction}>
         <div className='absolute top-3 right-3 z-50'>
-          <LikeButton targetId={member.userId} hasLiked={hasLiked} />
+          <LikeButton
+            toggleLike={toggleLike}
+            loading={loading}
+            hasLiked={hasLiked}
+          />
         </div>
         <div className='absolute top-2 left-3 z-50 '>
           <PresenceDot member={member} />
